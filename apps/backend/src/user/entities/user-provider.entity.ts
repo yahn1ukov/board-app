@@ -1,6 +1,6 @@
 import { PROVIDER_TYPE, type ProviderType } from "@board/shared";
 import { Column, Entity, JoinColumn, ManyToOne } from "typeorm";
-import { BaseEntity } from "../../common/entities/base.entity";
+import { BaseEntity } from "../../common/base.entity";
 import { UserEntity } from "./user.entity";
 
 @Entity("user_providers")

@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
 import { createClient } from "redis";
-import { AppConfigService } from "../config/config.service";
+import { ConfigService } from "../config/config.service";
 
 export const REDIS_TOKEN = "redis";
 
@@ -8,8 +8,8 @@ export const REDIS_TOKEN = "redis";
   providers: [
     {
       provide: REDIS_TOKEN,
-      inject: [AppConfigService],
-      useFactory: async (config: AppConfigService) => {
+      inject: [ConfigService],
+      useFactory: async (config: ConfigService) => {
         const client = createClient(config.redis);
 
         await client.connect();

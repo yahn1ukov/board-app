@@ -1,7 +1,9 @@
 import { Inject, Injectable } from "@nestjs/common";
+import { EventEmitter2 } from "@nestjs/event-emitter";
 import type { RedisClientType } from "redis";
 import { REDIS_TOKEN } from "../cache/cache.module";
-import { AppConfigService } from "../config/config.service";
+import { EVENT } from "../common/event.constant";
+import { ConfigService } from "../config/config.service";
 import { UserEntity } from "../user/entities/user.entity";
 import { UserProviderRepository } from "../user/repositories/user-provider.repository";
 import { UserRepository } from "../user/repositories/user.repository";
@@ -12,12 +14,13 @@ import { JwtPayload, OAuthUser, Tokens } from "./types/auth.type";
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly userRepository: UserRepository,
-    private readonly userProviderRepository: UserProviderRepository,
-    private readonly config: AppConfigService,
+    private readonly config: ConfigService,
+    private readonly event: EventEmitter2,
     @Inject(REDIS_TOKEN) private readonly redis: RedisClientType,
     private readonly hashHelper: HashHelper,
     private readonly tokenHelper: TokenHelper,
+    private readonly userRepository: UserRepository,
+    private readonly userProviderRepository: UserProviderRepository,
   ) {}
 
   async validateUser(oauth: OAuthUser): Promise<UserEntity> {
@@ -77,6 +80,8 @@ export class AuthService {
 
   async logout(userId: string): Promise<void> {
     await this.redis.del(`auth:session:${userId}`);
+
+    this.event.emit(EVENT.USER.LOGOUT, userId);
   }
 
   private async issueTokens(payload: JwtPayload): Promise<Tokens> {

@@ -2,14 +2,14 @@ import { PROVIDER_TYPE } from "@board/shared";
 import { Injectable } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import { Strategy, VerifyCallback, type Profile } from "passport-google-oauth20";
-import { AppConfigService } from "../../config/config.service";
+import { ConfigService } from "../../config/config.service";
 import { AuthService } from "../auth.service";
 import { JwtPayload } from "../types/auth.type";
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
   constructor(
-    config: AppConfigService,
+    config: ConfigService,
     private readonly service: AuthService,
   ) {
     super({

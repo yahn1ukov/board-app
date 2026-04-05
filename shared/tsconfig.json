@@ -7,7 +7,7 @@
     "emitDecoratorMetadata": true,
     "declaration": true,
     "strict": true,
-    "ignoreDeprecations": "6.0"
   },
   "include": ["src"]
 }
+ 

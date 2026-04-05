@@ -1,6 +1,6 @@
 import { Controller, Get, HttpCode, HttpStatus, Post, Res, UseGuards, UseInterceptors } from "@nestjs/common";
 import type { Response } from "express";
-import { AppConfigService } from "../config/config.service";
+import { ConfigService } from "../config/config.service";
 import { AuthService } from "./auth.service";
 import { CurrentUser } from "./decorators/current-user.decorator";
 import { GoogleAuthGuard } from "./guards/google.guard";
@@ -13,7 +13,7 @@ import type { JwtPayload, Tokens } from "./types/auth.type";
 @Controller("auth")
 export class AuthController {
   constructor(
-    private readonly config: AppConfigService,
+    private readonly config: ConfigService,
     private readonly service: AuthService,
     private readonly cookieHelper: CookieHelper,
   ) {}
@@ -28,7 +28,7 @@ export class AuthController {
 
     this.cookieHelper.set(res, tokens.refreshToken);
 
-    return res.redirect(`${this.config.app.frontendUrl}/auth-success?accessToken=${tokens.accessToken}`);
+    return res.redirect(`${this.config.app.frontendUrl}/google-oauth-success?token=${tokens.accessToken}`);
   }
 
   @UseGuards(JwtRefreshAuthGuard)

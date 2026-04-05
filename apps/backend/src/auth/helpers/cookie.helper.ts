@@ -1,10 +1,10 @@
 import { Injectable } from "@nestjs/common";
 import type { Response } from "express";
-import { AppConfigService } from "../../config/config.service";
+import { ConfigService } from "../../config/config.service";
 
 @Injectable()
 export class CookieHelper {
-  constructor(private readonly config: AppConfigService) {}
+  constructor(private readonly config: ConfigService) {}
 
   set(res: Response, refreshToken: string): void {
     res.cookie(this.config.cookie.name, refreshToken, {

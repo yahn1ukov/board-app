@@ -3,14 +3,14 @@ import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from "@nes
 import { Response } from "express";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { AppConfigService } from "../../config/config.service";
+import { ConfigService } from "../../config/config.service";
 import { CookieHelper } from "../helpers/cookie.helper";
 import type { Tokens } from "../types/auth.type";
 
 @Injectable()
 export class CookieInterceptor implements NestInterceptor<Tokens, AuthResponseDto> {
   constructor(
-    private readonly config: AppConfigService,
+    private readonly config: ConfigService,
     private readonly cookieHelper: CookieHelper,
   ) {}
 

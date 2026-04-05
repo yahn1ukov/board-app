@@ -7,7 +7,7 @@ export class HashHelper {
     return argon2.hash(value);
   }
 
-  async verify(hashValue: string, value: string): Promise<boolean> {
-    return argon2.verify(hashValue, value);
+  async verify(hashedValue: string, value: string): Promise<boolean> {
+    return argon2.verify(hashedValue, value);
   }
 }

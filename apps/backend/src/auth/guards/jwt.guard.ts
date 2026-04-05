@@ -13,7 +13,7 @@ export class JwtAuthGuard extends AuthGuard("jwt") {
       const client = ctx.switchToWs().getClient<Socket>();
       request = client.request as Request;
 
-      request.headers.authorization = client.handshake.headers.authorization || `Bearer ${client.handshake.auth.token}`;
+      request.headers.authorization = client.handshake.headers.authorization;
     } else {
       request = ctx.switchToHttp().getRequest() as Request;
     }

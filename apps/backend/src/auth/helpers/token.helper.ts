@@ -1,12 +1,12 @@
 import { Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { AppConfigService } from "../../config/config.service";
+import { ConfigService } from "../../config/config.service";
 import { JwtPayload, Tokens } from "../types/auth.type";
 
 @Injectable()
 export class TokenHelper {
   constructor(
-    private readonly config: AppConfigService,
+    private readonly config: ConfigService,
     private readonly jwtService: JwtService,
   ) {}
 
