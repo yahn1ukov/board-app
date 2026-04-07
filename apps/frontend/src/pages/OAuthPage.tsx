@@ -18,7 +18,7 @@ export default function OAuthPage() {
     } else {
       navigate(ROUTE.AUTH, { replace: true });
     }
-  }, [searchParams]);
+  }, [searchParams, navigate, setAccessToken]);
 
   return <p>Authentication...</p>;
 }

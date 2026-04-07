@@ -6,8 +6,8 @@ interface State {
 }
 
 interface Actions {
-  setAccessToken: (token: string) => void;
-  logout: () => void;
+  setAccessToken(token: string): void;
+  logout(): void;
 }
 
 type Store = State & Actions;
@@ -16,8 +16,12 @@ export const useAuthStore = create<Store>()(
   persist(
     (set) => ({
       accessToken: null,
-      setAccessToken: (token) => set({ accessToken: token }),
-      logout: () => set({ accessToken: null }),
+      setAccessToken(token) {
+        set({ accessToken: token });
+      },
+      logout() {
+        set({ accessToken: null });
+      },
     }),
     {
       name: "auth-storage",

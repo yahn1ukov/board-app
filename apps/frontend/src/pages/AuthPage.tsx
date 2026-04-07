@@ -1,7 +1,7 @@
 import { AuthCard } from "@/components/auth/AuthCard";
 import { AuthTitle } from "@/components/auth/AuthTitle";
 import { AuthWrapper } from "@/components/auth/AuthWrapper";
-import OAuthButton from "@/components/auth/OAuthButton";
+import OAuthButton from "@/components/oauth/OAuthButton";
 import { API_ENDPOINT, PROVIDER_TYPE } from "@board/shared";
 import GoogleIcon from "@mui/icons-material/Google";
 
