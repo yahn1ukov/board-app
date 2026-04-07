@@ -1,3 +1,4 @@
+import { API_ENDPOINT } from "@board/shared";
 import { Controller, Get, HttpCode, HttpStatus, Post, Res, UseGuards, UseInterceptors } from "@nestjs/common";
 import type { Response } from "express";
 import { ConfigService } from "../config/config.service";
@@ -10,7 +11,7 @@ import { CookieHelper } from "./helpers/cookie.helper";
 import { CookieInterceptor } from "./interceptors/cookie.interceptor";
 import type { JwtPayload, Tokens } from "./types/auth.type";
 
-@Controller("auth")
+@Controller(API_ENDPOINT.AUTH.INDEX)
 export class AuthController {
   constructor(
     private readonly config: ConfigService,
@@ -19,7 +20,7 @@ export class AuthController {
   ) {}
 
   @UseGuards(GoogleAuthGuard)
-  @Get("google/callback")
+  @Get(API_ENDPOINT.AUTH.GOOGLE)
   async authGoogleRedirect(
     @CurrentUser() payload: JwtPayload,
     @Res({ passthrough: true }) res: Response,
@@ -28,19 +29,19 @@ export class AuthController {
 
     this.cookieHelper.set(res, tokens.refreshToken);
 
-    return res.redirect(`${this.config.app.frontendUrl}/google-oauth-success?token=${tokens.accessToken}`);
+    return res.redirect(`${this.config.app.frontendUrl}/oauth-success?token=${tokens.accessToken}`);
   }
 
   @UseGuards(JwtRefreshAuthGuard)
   @UseInterceptors(CookieInterceptor)
-  @Post("refresh")
+  @Post(API_ENDPOINT.AUTH.REFRESH)
   @HttpCode(HttpStatus.OK)
   async refresh(@CurrentUser() payload: JwtPayload): Promise<Tokens> {
     return this.service.refresh(payload);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post("logout")
+  @Post(API_ENDPOINT.AUTH.LOGOUT)
   @HttpCode(HttpStatus.OK)
   async logout(@CurrentUser("id") userId: string, @Res({ passthrough: true }) res: Response): Promise<void> {
     this.cookieHelper.clear(res);

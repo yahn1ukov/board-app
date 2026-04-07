@@ -1,14 +1,14 @@
-import { GetOnlineUserResponseDto } from "@board/shared";
+import { API_ENDPOINT, GetOnlineUserResponseDto } from "@board/shared";
 import { Controller, Get, UseGuards } from "@nestjs/common";
 import { JwtAuthGuard } from "../auth/guards/jwt.guard";
 import { UserService } from "./user.service";
 
 @UseGuards(JwtAuthGuard)
-@Controller("users")
+@Controller(API_ENDPOINT.USER.INDEX)
 export class UserController {
   constructor(private readonly service: UserService) {}
 
-  @Get("online")
+  @Get(API_ENDPOINT.USER.ONLINE)
   async getAllOnline(): Promise<GetOnlineUserResponseDto[]> {
     return this.service.getAllOnline();
   }
