@@ -4,7 +4,10 @@ import { API_ENDPOINT, type GetOnlineUserResponseDto } from "@board/shared";
 
 export const UserService = {
   async getOnlineUsers() {
-    const users = await apiFetch<GetOnlineUserResponseDto[]>(`${API_ENDPOINT.USER.INDEX}/${API_ENDPOINT.USER.ONLINE}`);
+    const users = await apiFetch<GetOnlineUserResponseDto[]>(`${API_ENDPOINT.USER.INDEX}/${API_ENDPOINT.USER.ONLINE}`, {
+      method: "GET",
+    });
+
     useBoardStore.getState().setOnlineUsers(users);
   },
 };

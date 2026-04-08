@@ -3,6 +3,7 @@ import {
   type CreateTaskRequestDto,
   type CreateTaskResponseDto,
   type GetOnlineUserResponseDto,
+  type UpdateTaskResponseDto,
 } from "@board/shared";
 import { io, type Socket } from "socket.io-client";
 import { create } from "zustand";
@@ -10,7 +11,7 @@ import { useAuthStore } from "./auth";
 
 export interface SocketHandlers {
   onTaskCreated(task: CreateTaskResponseDto): void;
-  onTaskUpdated(task: any): void;
+  onTaskUpdated(task: UpdateTaskResponseDto): void;
   onTaskDeleted(taskId: string): void;
   onJoined(user: GetOnlineUserResponseDto): void;
   onLogout(): void;

@@ -1,5 +1,5 @@
 import { GetOnlineUserResponseDto } from "@board/shared";
-import { UserEntity } from "./entities/user.entity";
+import { UserEntity } from "../entities/user.entity";
 
 export class UserMapper {
   static toDto(obj: UserEntity | string): GetOnlineUserResponseDto {

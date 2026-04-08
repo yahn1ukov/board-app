@@ -2,8 +2,8 @@ import type { GetOnlineUserResponseDto } from "@board/shared";
 import { Inject, Injectable } from "@nestjs/common";
 import type { RedisClientType } from "redis";
 import { REDIS_TOKEN } from "../cache/cache.module";
+import { UserMapper } from "./mappers/user.mapper";
 import { UserRepository } from "./repositories/user.repository";
-import { UserMapper } from "./user.mapper";
 
 export const ONLINE_USERS_KEY = "online_users";
 

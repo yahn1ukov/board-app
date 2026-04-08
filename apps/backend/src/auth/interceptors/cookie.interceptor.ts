@@ -19,13 +19,11 @@ export class CookieInterceptor implements NestInterceptor<Tokens, AuthResponseDt
       map((tokens) => {
         const res = ctx.switchToHttp().getResponse<Response>();
 
-        this.cookieHelper.set(res, tokens.refreshToken);
+        const { accessToken, refreshToken } = tokens;
 
-        return {
-          tokenType: this.config.jwt.type,
-          accessToken: tokens.accessToken,
-          expiresIn: this.config.jwt.access.expiresIn,
-        };
+        this.cookieHelper.set(res, refreshToken);
+
+        return { accessToken };
       }),
     );
   }

@@ -1,13 +1,20 @@
-import type { CreateTaskRequestDto, GetOnlineUserResponseDto, GetTaskPreviewResponseDto } from "@board/shared";
+import type {
+  CreateTaskRequestDto,
+  GetOnlineUserResponseDto,
+  GetTaskDetailResponseDto,
+  GetTaskPreviewResponseDto,
+} from "@board/shared";
 import { create } from "zustand";
 import { useSocketStore } from "./socket";
 
 interface State {
+  task: GetTaskDetailResponseDto | null;
   tasks: GetTaskPreviewResponseDto[];
   onlineUsers: GetOnlineUserResponseDto[];
 }
 
 interface Actions {
+  setTask(task: GetTaskDetailResponseDto): void;
   setTasks(tasks: GetTaskPreviewResponseDto[]): void;
   setOnlineUsers(users: GetOnlineUserResponseDto[]): void;
   connect(): void;
@@ -18,8 +25,12 @@ interface Actions {
 type Store = State & Actions;
 
 export const useBoardStore = create<Store>((set, get) => ({
+  task: null,
   tasks: [],
   onlineUsers: [],
+  setTask(task) {
+    set({ task });
+  },
   setTasks(tasks) {
     set({ tasks });
   },
@@ -33,19 +44,19 @@ export const useBoardStore = create<Store>((set, get) => ({
       },
       onTaskUpdated(updatedTask) {
         set((state) => ({
-          tasks: state.tasks.map((t) => (t.id === updatedTask.id ? { ...t, ...updatedTask } : t)),
+          tasks: state.tasks.map((task) => (task.id === updatedTask.id ? { ...task, ...updatedTask } : task)),
         }));
       },
       onTaskDeleted(taskId) {
         set((state) => ({
-          tasks: state.tasks.filter((t) => t.id !== taskId),
+          tasks: state.tasks.filter((task) => task.id !== taskId),
         }));
       },
-      onJoined(user) {
+      onJoined(joinedUser) {
         set((state) => ({
-          onlineUsers: state.onlineUsers.some((u) => u.id === user.id)
+          onlineUsers: state.onlineUsers.some((user) => user.id === joinedUser.id)
             ? state.onlineUsers
-            : [...state.onlineUsers, user],
+            : [...state.onlineUsers, joinedUser],
         }));
       },
       onLogout() {

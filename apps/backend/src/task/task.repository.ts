@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { TaskEntity } from "./task.entity";
-import { CreateTaskPayload, UpdateTaskPayload } from "./task.type";
+import { TaskEntity } from "./entities/task.entity";
+import { CreateTaskPayload, UpdateTaskPayload } from "./types/task.type";
 
 @Injectable()
 export class TaskRepository {
@@ -49,7 +49,7 @@ export class TaskRepository {
     return this.repository.findOneByOrFail({ id });
   }
 
-  async updateById(id: string, authorId: string, payload: UpdateTaskPayload): Promise<void> {
+  async updateById(id: string, authorId: string, payload: UpdateTaskPayload): Promise<TaskEntity | null> {
     const { assigneeId, ...data } = payload;
 
     const result = await this.repository.update(
@@ -62,6 +62,15 @@ export class TaskRepository {
     if (!result.affected) {
       throw new NotFoundException("Task not found");
     }
+
+    if (assigneeId) {
+      return this.repository.findOneOrFail({
+        where: { id },
+        relations: { assignee: true },
+      });
+    }
+
+    return null;
   }
 
   async deleteById(id: string, authorId: string): Promise<void> {

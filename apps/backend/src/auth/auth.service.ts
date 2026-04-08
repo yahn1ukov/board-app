@@ -2,7 +2,7 @@ import { Inject, Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import type { RedisClientType } from "redis";
 import { REDIS_TOKEN } from "../cache/cache.module";
-import { EVENT } from "../common/event.constant";
+import { EVENT } from "../common/constants/event.constant";
 import { ConfigService } from "../config/config.service";
 import { UserEntity } from "../user/entities/user.entity";
 import { UserProviderRepository } from "../user/repositories/user-provider.repository";

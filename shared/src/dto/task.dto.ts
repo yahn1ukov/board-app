@@ -1,5 +1,5 @@
 import { SectionType } from "../types/section.type";
-import { User } from "./user.dto";
+import { UserBase } from "./user.dto";
 
 interface Task {
   id: string;
@@ -7,8 +7,8 @@ interface Task {
   description: string;
   section: SectionType;
   position: number;
-  author: Omit<User, "id">;
-  assignee: Omit<User, "id">;
+  author: UserBase;
+  assignee: UserBase;
   createdAt: Date;
 }
 
@@ -22,8 +22,8 @@ export type GetTaskDetailResponseDto = Omit<Task, "position">;
 
 export type GetTaskPreviewResponseDto = Omit<Task, "description">;
 
-export type UpdateTaskRequestDto = Partial<
-  CreateTaskRequestDto & {
-    position: number;
-  }
->;
+export type UpdateTaskRequestDto = Partial<Pick<Task, "title" | "description" | "section" | "position">> & {
+  assigneeId?: string;
+};
+
+export type UpdateTaskResponseDto = Pick<Task, "id"> & Partial<Omit<Task, "id" | "author" | "createdAt">>;

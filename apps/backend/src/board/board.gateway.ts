@@ -1,4 +1,4 @@
-import { type UpdateTaskRequestDto, WS_EVENT } from "@board/shared";
+import { type UpdateTaskResponseDto, WS_EVENT } from "@board/shared";
 import { UseGuards } from "@nestjs/common";
 import { OnEvent } from "@nestjs/event-emitter";
 import { JwtService } from "@nestjs/jwt";
@@ -16,8 +16,8 @@ import { Server, Socket } from "socket.io";
 import type { JwtPayload } from "src/auth/types/auth.type";
 import { CurrentUser } from "../auth/decorators/current-user.decorator";
 import { JwtAuthGuard } from "../auth/guards/jwt.guard";
-import { EVENT } from "../common/event.constant";
-import { CreateTaskRequestDto } from "../task/task.dto";
+import { EVENT } from "../common/constants/event.constant";
+import { CreateTaskRequestDto } from "../task/dto/task.dto";
 import { TaskService } from "../task/task.service";
 import { UserService } from "../user/user.service";
 
@@ -77,8 +77,8 @@ export class BoardGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   @OnEvent(EVENT.TASK.UPDATED)
-  handleTaskUpdated(taskId: string, dto: UpdateTaskRequestDto): void {
-    this.server.emit(WS_EVENT.TASK.UPDATED, { id: taskId, ...dto });
+  handleTaskUpdated(dto: UpdateTaskResponseDto): void {
+    this.server.emit(WS_EVENT.TASK.UPDATED, dto);
   }
 
   @OnEvent(EVENT.TASK.DELETED)

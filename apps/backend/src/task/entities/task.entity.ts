@@ -1,7 +1,7 @@
 import { SECTION_TYPE, type SectionType } from "@board/shared";
 import { Column, Entity, JoinColumn, ManyToOne } from "typeorm";
-import { BaseEntity } from "../common/base.entity";
-import { UserEntity } from "../user/entities/user.entity";
+import { BaseEntity } from "../../common/entities/base.entity";
+import { UserEntity } from "../../user/entities/user.entity";
 
 @Entity("tasks")
 export class TaskEntity extends BaseEntity {

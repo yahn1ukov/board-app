@@ -4,15 +4,16 @@ import {
   GetTaskDetailResponseDto,
   GetTaskPreviewResponseDto,
   UpdateTaskRequestDto,
+  UpdateTaskResponseDto,
 } from "@board/shared";
 import { Inject, Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { WsException } from "@nestjs/websockets";
 import type { RedisClientType } from "redis";
 import { REDIS_TOKEN } from "../cache/cache.module";
-import { EVENT } from "../common/event.constant";
+import { EVENT } from "../common/constants/event.constant";
 import { ONLINE_USERS_KEY } from "../user/user.service";
-import { TaskMapper } from "./task.mapper";
+import { TaskMapper } from "./mappers/task.mapper";
 import { TaskRepository } from "./task.repository";
 
 @Injectable()
@@ -47,9 +48,22 @@ export class TaskService {
   }
 
   async updateById(id: string, authorId: string, dto: UpdateTaskRequestDto): Promise<void> {
-    await this.repository.updateById(id, authorId, dto);
+    const updatedTask = await this.repository.updateById(id, authorId, dto);
 
-    this.event.emit(EVENT.TASK.UPDATED, id, dto);
+    const { assigneeId: _, ...data } = dto;
+
+    const updatedDto: UpdateTaskResponseDto = { id, ...data };
+
+    if (updatedTask?.assignee) {
+      updatedDto.assignee = {
+        email: updatedTask.assignee.email,
+        firstName: updatedTask.assignee.firstName,
+        lastName: updatedTask.assignee.lastName,
+        avatarUrl: updatedTask.assignee.avatarUrl,
+      };
+    }
+
+    this.event.emit(EVENT.TASK.UPDATED, updatedDto);
   }
 
   async deleteById(id: string, authorId: string): Promise<void> {

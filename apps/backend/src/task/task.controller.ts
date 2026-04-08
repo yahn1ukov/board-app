@@ -2,7 +2,7 @@ import { API_ENDPOINT, GetTaskDetailResponseDto, GetTaskPreviewResponseDto } fro
 import { Body, Controller, Delete, Get, Param, Patch, UseGuards } from "@nestjs/common";
 import { CurrentUser } from "../auth/decorators/current-user.decorator";
 import { JwtAuthGuard } from "../auth/guards/jwt.guard";
-import { UpdateTaskRequestDto } from "./task.dto";
+import { UpdateTaskRequestDto } from "./dto/task.dto";
 import { TaskService } from "./task.service";
 
 @UseGuards(JwtAuthGuard)

@@ -1,8 +1,8 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { CacheModule } from "../cache/cache.module";
+import { TaskEntity } from "./entities/task.entity";
 import { TaskController } from "./task.controller";
-import { TaskEntity } from "./task.entity";
 import { TaskRepository } from "./task.repository";
 import { TaskService } from "./task.service";
 
@@ -13,4 +13,3 @@ import { TaskService } from "./task.service";
   exports: [TaskService],
 })
 export class TaskModule {}
- 

@@ -1,5 +1,5 @@
 import { GetTaskDetailResponseDto, GetTaskPreviewResponseDto } from "@board/shared";
-import { TaskEntity } from "./task.entity";
+import { TaskEntity } from "../entities/task.entity";
 
 export class TaskMapper {
   static toDetailDto(task: TaskEntity): GetTaskDetailResponseDto {
