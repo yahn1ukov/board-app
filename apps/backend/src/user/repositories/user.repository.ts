@@ -20,4 +20,13 @@ export class UserRepository {
     const user = this.repository.create(payload);
     return this.repository.save(user);
   }
+
+  async getAll(): Promise<UserEntity[]> {
+    return this.repository.find({
+      order: {
+        firstName: "ASC",
+        lastName: "ASC",
+      },
+    });
+  }
 }

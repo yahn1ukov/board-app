@@ -1,4 +1,4 @@
-import type { GetOnlineUserResponseDto } from "@board/shared";
+import type { GetOnlineUserResponseDto, GetUserResponseDto } from "@board/shared";
 import { Inject, Injectable } from "@nestjs/common";
 import type { RedisClientType } from "redis";
 import { REDIS_TOKEN } from "../cache/cache.module";
@@ -14,11 +14,17 @@ export class UserService {
     private readonly repository: UserRepository,
   ) {}
 
-  async addOnline(id: string): Promise<{ user: GetOnlineUserResponseDto; isNew: boolean } | null> {
+  async getAll(): Promise<GetUserResponseDto[]> {
+    const users = await this.repository.getAll();
+
+    return users.map((user) => UserMapper.toDto(user));
+  }
+
+  async addOnline(id: string): Promise<{ onlineUser: GetOnlineUserResponseDto; isNew: boolean } | null> {
     const cachedUser = await this.redis.hGet(ONLINE_USERS_KEY, id);
     if (cachedUser) {
       return {
-        user: UserMapper.toDto(cachedUser),
+        onlineUser: UserMapper.toOnlineDto(cachedUser),
         isNew: false,
       };
     }
@@ -28,19 +34,16 @@ export class UserService {
       return null;
     }
 
-    const onlineUser = UserMapper.toDto(user);
+    const onlineUser = UserMapper.toOnlineDto(user);
     await this.redis.hSet(ONLINE_USERS_KEY, id, JSON.stringify(onlineUser));
 
-    return {
-      user: onlineUser,
-      isNew: true,
-    };
+    return { onlineUser, isNew: true };
   }
 
   async getAllOnline(): Promise<GetOnlineUserResponseDto[]> {
     const cachedUsers = await this.redis.hVals(ONLINE_USERS_KEY);
 
-    return cachedUsers.map((cachedUser) => UserMapper.toDto(cachedUser));
+    return cachedUsers.map((cachedUser) => UserMapper.toOnlineDto(cachedUser));
   }
 
   async removeOnline(id: string): Promise<void> {

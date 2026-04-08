@@ -55,7 +55,7 @@ export class BoardGateway implements OnGatewayConnection, OnGatewayDisconnect {
       await client.join(payload.id);
 
       if (result.isNew) {
-        this.server.emit(WS_EVENT.SYSTEM.JOINED, result.user);
+        this.server.emit(WS_EVENT.SYSTEM.JOINED, result.onlineUser);
       }
     } catch (error: unknown) {
       client.disconnect(true);

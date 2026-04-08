@@ -5,8 +5,10 @@ export interface UserBase {
   avatarUrl: string | null;
 }
 
-interface User extends UserBase {
+export interface User extends UserBase {
   id: string;
 }
+
+export type GetUserResponseDto = User;
 
 export type GetOnlineUserResponseDto = User;

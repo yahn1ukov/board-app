@@ -15,4 +15,4 @@ export type {
   UpdateTaskRequestDto,
   UpdateTaskResponseDto,
 } from "./dto/task.dto";
-export type { GetOnlineUserResponseDto } from "./dto/user.dto";
+export type { GetOnlineUserResponseDto, GetUserResponseDto, User } from "./dto/user.dto";
