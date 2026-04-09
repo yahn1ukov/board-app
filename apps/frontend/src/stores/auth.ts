@@ -1,12 +1,15 @@
+import type { AuthUserResponseDto } from "@board/shared";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 interface State {
   accessToken: string | null;
+  currentUser: AuthUserResponseDto | null;
 }
 
 interface Actions {
   setAccessToken(token: string): void;
+  setCurrentUser(user: AuthUserResponseDto): void;
   logout(): void;
 }
 
@@ -16,11 +19,18 @@ export const useAuthStore = create<Store>()(
   persist(
     (set) => ({
       accessToken: null,
+      currentUser: null,
       setAccessToken(token) {
         set({ accessToken: token });
       },
+      setCurrentUser(user) {
+        set({ currentUser: user });
+      },
       logout() {
-        set({ accessToken: null });
+        set({
+          accessToken: null,
+          currentUser: null,
+        });
       },
     }),
     {

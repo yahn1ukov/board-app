@@ -46,7 +46,13 @@ export class TaskRepository {
   }
 
   async getById(id: string): Promise<TaskEntity> {
-    return this.repository.findOneByOrFail({ id });
+    return this.repository.findOneOrFail({
+      where: { id },
+      relations: {
+        author: true,
+        assignee: true,
+      },
+    });
   }
 
   async updateById(id: string, authorId: string, payload: UpdateTaskPayload): Promise<TaskEntity | null> {

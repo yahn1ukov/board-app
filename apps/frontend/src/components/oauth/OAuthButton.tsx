@@ -9,14 +9,14 @@ interface State {
 }
 
 interface Actions {
-  onClick: () => void;
+  onClick(): void;
 }
 
 type Props = State & Actions;
 
 export default function OAuthButton({ icon: Icon, provider, loading, onClick }: Props) {
   return (
-    <Button variant="outlined" startIcon={<Icon />} onClick={onClick} loading={loading} loadingPosition="end">
+    <Button variant="outlined" startIcon={<Icon />} onClick={() => onClick()} loading={loading} loadingPosition="end">
       log in with {provider}
     </Button>
   );

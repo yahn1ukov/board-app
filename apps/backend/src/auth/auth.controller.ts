@@ -1,4 +1,4 @@
-import { API_ENDPOINT } from "@board/shared";
+import { API_ENDPOINT, AuthUserResponseDto } from "@board/shared";
 import { Controller, Get, HttpCode, HttpStatus, Post, Res, UseGuards, UseInterceptors } from "@nestjs/common";
 import type { Response } from "express";
 import { ConfigService } from "../config/config.service";
@@ -30,6 +30,12 @@ export class AuthController {
     this.cookieHelper.set(res, tokens.refreshToken);
 
     return res.redirect(`${this.config.app.frontendUrl}/oauth-success?token=${tokens.accessToken}`);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get(API_ENDPOINT.AUTH.ME)
+  async getMe(@CurrentUser() user: JwtPayload): Promise<AuthUserResponseDto> {
+    return { id: user.id };
   }
 
   @UseGuards(JwtRefreshAuthGuard)

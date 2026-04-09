@@ -23,7 +23,7 @@ export const TaskService = {
     useBoardStore.getState().setTask(task);
   },
   async updateTask(id: string, dto: UpdateTaskRequestDto) {
-    await apiFetch<void>(`${API_ENDPOINT.TASK.UPDATE}/${id}`, {
+    await apiFetch<void>(`${API_ENDPOINT.TASK.INDEX}/${id}`, {
       method: "PATCH",
       body: dto,
     });

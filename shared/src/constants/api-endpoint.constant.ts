@@ -2,6 +2,7 @@ export const API_ENDPOINT = {
   AUTH: {
     INDEX: "auth",
     GOOGLE: "google/callback",
+    ME: "me",
     REFRESH: "refresh",
     LOGOUT: "logout",
   },

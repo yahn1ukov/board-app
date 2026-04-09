@@ -45,7 +45,6 @@ export class ConfigService {
 
   get jwt() {
     return {
-      type: this.config.get("JWT_TOKEN_TYPE", "Bearer"),
       access: {
         secret: this.config.get("JWT_ACCESS_SECRET_KEY", "your-access-secret-key"),
         expiresIn: +this.config.get("JWT_ACCESS_EXPIRES_IN", "900"),

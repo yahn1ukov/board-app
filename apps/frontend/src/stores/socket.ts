@@ -10,11 +10,12 @@ import { create } from "zustand";
 import { useAuthStore } from "./auth";
 
 export interface SocketHandlers {
+  onConnect?(): void;
+  onJoined(user: GetOnlineUserResponseDto): void;
+  onLogout(): void;
   onTaskCreated(task: CreateTaskResponseDto): void;
   onTaskUpdated(task: UpdateTaskResponseDto): void;
   onTaskDeleted(taskId: string): void;
-  onJoined(user: GetOnlineUserResponseDto): void;
-  onLogout(): void;
 }
 
 interface State {
@@ -45,11 +46,12 @@ export const useSocketStore = create<Store>((set, get) => ({
       withCredentials: true,
     });
 
+    socket.on(WS_EVENT.CONNECT, () => handlers.onConnect?.());
+    socket.on(WS_EVENT.SYSTEM.JOINED, handlers.onJoined);
+    socket.on(WS_EVENT.SYSTEM.LOGOUT, handlers.onLogout);
     socket.on(WS_EVENT.TASK.CREATED, handlers.onTaskCreated);
     socket.on(WS_EVENT.TASK.UPDATED, handlers.onTaskUpdated);
     socket.on(WS_EVENT.TASK.DELETED, handlers.onTaskDeleted);
-    socket.on(WS_EVENT.SYSTEM.JOINED, handlers.onJoined);
-    socket.on(WS_EVENT.SYSTEM.LOGOUT, handlers.onLogout);
 
     set({ socket });
   },

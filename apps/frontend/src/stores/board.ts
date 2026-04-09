@@ -17,7 +17,7 @@ interface Actions {
   setTask(task: GetTaskDetailResponseDto): void;
   setTasks(tasks: GetTaskPreviewResponseDto[]): void;
   setOnlineUsers(users: GetOnlineUserResponseDto[]): void;
-  connect(): void;
+  connect(onConnected?: () => void): void;
   disconnect(): void;
   createTask(dto: CreateTaskRequestDto): void;
 }
@@ -37,8 +37,19 @@ export const useBoardStore = create<Store>((set, get) => ({
   setOnlineUsers(users) {
     set({ onlineUsers: users });
   },
-  connect() {
+  connect(onConnected?) {
     useSocketStore.getState().connect({
+      onConnect: onConnected,
+      onJoined(joinedUser) {
+        set((state) => ({
+          onlineUsers: state.onlineUsers.some((user) => user.id === joinedUser.id)
+            ? state.onlineUsers
+            : [...state.onlineUsers, joinedUser],
+        }));
+      },
+      onLogout() {
+        get().disconnect();
+      },
       onTaskCreated(task) {
         set((state) => ({ tasks: [task, ...state.tasks] }));
       },
@@ -52,21 +63,15 @@ export const useBoardStore = create<Store>((set, get) => ({
           tasks: state.tasks.filter((task) => task.id !== taskId),
         }));
       },
-      onJoined(joinedUser) {
-        set((state) => ({
-          onlineUsers: state.onlineUsers.some((user) => user.id === joinedUser.id)
-            ? state.onlineUsers
-            : [...state.onlineUsers, joinedUser],
-        }));
-      },
-      onLogout() {
-        get().disconnect();
-      },
     });
   },
   disconnect() {
     useSocketStore.getState().disconnect();
-    set({ tasks: [], onlineUsers: [] });
+    set({
+      task: null,
+      tasks: [],
+      onlineUsers: [],
+    });
   },
   createTask(dto) {
     useSocketStore.getState().createTask(dto);

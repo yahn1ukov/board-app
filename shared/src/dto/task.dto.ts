@@ -1,5 +1,5 @@
 import { SectionType } from "../types/section.type";
-import { UserBase } from "./user.dto";
+import { User, UserBase } from "./user.dto";
 
 interface Task {
   id: string;
@@ -7,7 +7,7 @@ interface Task {
   description: string;
   section: SectionType;
   position: number;
-  author: UserBase;
+  author: User;
   assignee: UserBase;
   createdAt: Date;
 }
