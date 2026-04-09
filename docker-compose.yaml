@@ -1,0 +1,69 @@
+name: board-app
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: apps/frontend/Dockerfile
+      args:
+        VITE_BASE_HTTP_URL:
+        VITE_BASE_WS_URL:
+    container_name: frontend
+    ports:
+      - 5173:5173
+    depends_on:
+      - backend
+    networks:
+      - board-network
+
+  backend:
+    build:
+      context: .
+      dockerfile: apps/backend/Dockerfile
+    container_name: backend
+    env_file:
+      - apps/backend/.env
+    ports:
+      - 3000:3000
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - board-network
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_DB:
+      POSTGRES_USER:
+      POSTGRES_PASSWORD:
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - board-network
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - 6379:6379
+    command: >
+      redis-server 
+      --requirepass
+      --appendonly
+    volumes:
+      - redis_data:/data
+    networks:
+      - board-network
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  board-network:
+    driver: bridge
